@@ -32,7 +32,8 @@ public class WellKnownController {
     @GetMapping(value = "/oauth-protected-resource", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Map<String, Object>> oauthProtectedResource() {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("resource", this.baseUrl + this.sseEndpoint);
+        //body.put("resource", this.baseUrl + this.sseEndpoint);
+        body.put("resource", this.baseUrl);
         body.put("authorization_servers", List.of(this.issuer));
         body.put("bearer_methods_supported", List.of("header"));
         body.put("scopes_supported", List.of("openid", "profile", "email", "mcp.read", "mcp.write"));
