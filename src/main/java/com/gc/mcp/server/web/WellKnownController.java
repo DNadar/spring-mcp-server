@@ -31,7 +31,8 @@ public class WellKnownController {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("resource", this.resourceUrl);
         body.put("authorization_servers", List.of(this.issuer));
-        body.put("scopes_supported", List.of("openid", "profile", "email", "mcp.read", "mcp.write"));
+        //body.put("scopes_supported", List.of("openid", "profile", "email", "mcp.read", "mcp.write"));
+        body.put("scopes_supported", List.of("openid", "profile", "email"));
         return Mono.just(body);
     }
 
