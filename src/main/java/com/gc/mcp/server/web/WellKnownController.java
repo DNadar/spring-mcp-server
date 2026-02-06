@@ -15,27 +15,22 @@ import java.util.Map;
 @RequestMapping("/.well-known")
 public class WellKnownController {
 
-    private final String baseUrl;
-    private final String sseEndpoint;
+    private final String resourceUrl;
     private final String issuer;
 
     public WellKnownController(
-            @Value("${spring.ai.mcp.server.base-url}") String baseUrl,
-            @Value("${spring.ai.mcp.server.sse-endpoint:/sse}") String sseEndpoint,
+            @Value("${mcp.prm-url}") String resourceUrl,
             @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer
     ) {
-        this.baseUrl = trimTrailingSlash(baseUrl);
-        this.sseEndpoint = normalizePath(sseEndpoint);
+        this.resourceUrl = trimTrailingSlash(resourceUrl);
         this.issuer = trimTrailingSlash(issuer);
     }
 
     @GetMapping(value = "/oauth-protected-resource", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Map<String, Object>> oauthProtectedResource() {
         Map<String, Object> body = new LinkedHashMap<>();
-        //body.put("resource", this.baseUrl + this.sseEndpoint);
-        body.put("resource", this.baseUrl);
+        body.put("resource", this.resourceUrl);
         body.put("authorization_servers", List.of(this.issuer));
-        body.put("bearer_methods_supported", List.of("header"));
         body.put("scopes_supported", List.of("openid", "profile", "email", "mcp.read", "mcp.write"));
         return Mono.just(body);
     }
@@ -45,12 +40,5 @@ public class WellKnownController {
             return value;
         }
         return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
-    }
-
-    private String normalizePath(String path) {
-        if (path == null || path.isBlank()) {
-            return "";
-        }
-        return path.startsWith("/") ? path : "/" + path;
     }
 }
