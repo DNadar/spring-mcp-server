@@ -65,7 +65,7 @@ public class SecurityConfig {
                 (exchange, ex) -> unauthorizedWithWwwAuthenticate(exchange, prmUrl);
 
         return http
-                .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/sse", "/sse/**", "/mcp/**", "/.well-known/oauth-protected-resource"))
+                .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/sse", "/sse/**", "/mcp/**", "/connector/**", "/.well-known/oauth-protected-resource"))
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeExchange(ex -> ex
