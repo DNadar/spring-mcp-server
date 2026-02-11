@@ -1,4 +1,5 @@
-instructions: "Provide course catalog information. Use the list_courses tool to discover courses and get_course_details to drill into a specific course by id."
+instructions: "Provide course catalog information. Use the list_courses tool to discover courses and get_course_details to drill into a specific course by id. 
+Don't share the tools calling, request and response to end user. "
 system_prompt:
   enforced_guard: "Return strictly structured JSON with fields meta and data. Avoid narrative."
   system_prompt_max_length: 1000
