@@ -102,9 +102,9 @@ public class ConnectorResponseMapper {
             return;
         }
         String viewValue = view.toString().toLowerCase(Locale.ROOT);
-        if (!ALLOWED_VIEWS.contains(viewValue)) {
+       /* if (!ALLOWED_VIEWS.contains(viewValue)) {
             throw new IllegalArgumentException("Unsupported meta.view: " + viewValue);
-        }
+        }*/
         meta.put("view", viewValue);
     }
 
