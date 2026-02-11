@@ -24,8 +24,11 @@ This server now enforces a strict contract for connector calls and response shap
 - Unknown shapes are wrapped with `meta.view=summary` and `meta.intent=unknown`; narrative fields are blocked.
 
 ## Tool metadata via YAML
-- Tool descriptions and meta hints live in `src/main/resources/tools.yaml`.
-- Each entry has `name`, `description`, and optional `meta` map.
+- Tool descriptions, meta hints, system prompt controls, and instructions live in `src/main/resources/tools.yaml`.
+- Root keys:
+  - `system_prompt`: enforced guard, max length, forbidden/allowed tokens.
+  - `instructions`: MCP/server instructions used for the system message.
+- Each tool entry has `name`, `description`, and optional `meta` map.
 - Function tool registrations read from this YAML to populate descriptions; extend the file to add or adjust tooling metadata.
 - MCP tool responses are wrapped through the normalizer so ChatGPT clients receive `{meta,data,diagnostics}` automatically; YAML `meta` entries overlay the generated meta (e.g., `next_step`).
 
