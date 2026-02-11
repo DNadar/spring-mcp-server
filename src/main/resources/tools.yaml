@@ -1,3 +1,16 @@
+instructions: "Provide course catalog information. Use the list_courses tool to discover courses and get_course_details to drill into a specific course by id."
+system_prompt:
+  enforced_guard: "Return strictly structured JSON with fields meta and data. Avoid narrative."
+  system_prompt_max_length: 1000
+  forbidden_tokens:
+    - "render"
+    - "display as table"
+    - "use emojis"
+    - "say"
+    - "format as markdown"
+    - "respond with markdown"
+    - "html"
+  allowed_patterns: []
 tools:
   - name: list_courses
     description: "List all available courses with id, title, category, level, durationHours, and description."

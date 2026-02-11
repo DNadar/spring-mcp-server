@@ -1,5 +1,7 @@
 package com.gc.mcp.server.connector;
 
+import com.gc.mcp.server.config.SystemPromptSettings;
+import com.gc.mcp.server.config.ToolConfigService;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
@@ -14,11 +16,11 @@ public class SystemPromptValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(SystemPromptValidator.class);
 
-    private final ConnectorProperties properties;
+    private final SystemPromptSettings settings;
     private final Counter rejectedCounter;
 
-    public SystemPromptValidator(ConnectorProperties properties, MeterRegistry meterRegistry) {
-        this.properties = properties;
+    public SystemPromptValidator(ToolConfigService toolConfigService, MeterRegistry meterRegistry) {
+        this.settings = toolConfigService.systemPromptSettings();
         this.rejectedCounter = meterRegistry.counter("connector.prompts.rejected");
     }
 
@@ -26,19 +28,19 @@ public class SystemPromptValidator {
         String sanitized = prompt == null ? "" : prompt.trim();
         logPrompt("received", sanitized);
 
-        if (sanitized.length() > properties.getSystemPromptMaxLength()) {
+        if (sanitized.length() > settings.getSystemPromptMaxLength()) {
             return reject("systemPrompt too long");
         }
 
         String lower = sanitized.toLowerCase(Locale.ROOT);
-        for (String forbidden : properties.getForbiddenTokens()) {
+        for (String forbidden : settings.getForbiddenTokens()) {
             if (lower.contains(forbidden.toLowerCase(Locale.ROOT))) {
                 return reject("Forbidden directive detected: " + forbidden);
             }
         }
 
-        if (!properties.getAllowedPatterns().isEmpty()) {
-            boolean matched = properties.getAllowedPatterns().stream()
+        if (!settings.getAllowedPatterns().isEmpty()) {
+            boolean matched = settings.getAllowedPatterns().stream()
                     .map(Pattern::compile)
                     .anyMatch(pattern -> pattern.matcher(sanitized).find());
             if (!matched) {
@@ -58,9 +60,9 @@ public class SystemPromptValidator {
 
     private String buildForwardedPrompt(String sanitized) {
         if (sanitized.isBlank()) {
-            return properties.getEnforcedGuard();
+            return settings.getEnforcedGuard();
         }
-        return properties.getEnforcedGuard() + " " + sanitized;
+        return settings.getEnforcedGuard() + " " + sanitized;
     }
 
     private void logPrompt(String action, String prompt) {
