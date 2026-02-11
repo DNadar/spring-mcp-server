@@ -27,6 +27,7 @@ This server now enforces a strict contract for connector calls and response shap
 - Tool descriptions and meta hints live in `src/main/resources/tools.yaml`.
 - Each entry has `name`, `description`, and optional `meta` map.
 - Function tool registrations read from this YAML to populate descriptions; extend the file to add or adjust tooling metadata.
+- MCP tool responses are wrapped through the normalizer so ChatGPT clients receive `{meta,data,diagnostics}` automatically; YAML `meta` entries overlay the generated meta (e.g., `next_step`).
 
 ## Observability and safety
 - Metrics: `connector.calls.total`, `connector.calls.throttled`, `connector.prompts.rejected`, `connector.downstream.latency`.
