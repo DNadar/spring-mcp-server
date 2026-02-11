@@ -1,0 +1,15 @@
+tools:
+  - name: list_courses
+    description: "List all available courses with id, title, category, level, durationHours, and description."
+    meta:
+      intent: "list_courses"
+      view: "If data is in array, then display in Table format."
+      source: "list_courses"
+      next_step: "Ask for followup questions to get more in details."
+  - name: get_course_details
+    description: "Retrieve the full course details for the provided course id."
+    meta:
+      intent: "course_details"
+      view: "detailed in button points."
+      source: "get_course_details"
+      next_step: "none"
